@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import el.ka.weatherapp.MainActivity
 import el.ka.weatherapp.R
+import el.ka.weatherapp.data.model.City
 import el.ka.weatherapp.data.model.SpinnerItem
 import el.ka.weatherapp.data.model.SpinnerType
 import el.ka.weatherapp.observer.Observed
@@ -22,8 +23,19 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   private val mView by lazy { requireView() }
   private val navController by lazy { findNavController() }
 
-
   private val spinnerCity: Spinner by lazy { mView.findViewById(R.id.spinnerCity) }
+  private val allCities by lazy { ObservedValue() }
+  private val allCitiesObserver by lazy {
+    object: Observer {
+      override fun notify(observed: Observed) {
+        val a = ((observed as ObservedValue).getValue() as List<*>).mapNotNull { if (it is City) it else null }
+        updateCitySpinner()
+        if (a.isNotEmpty()) spinnerCity.setSelection(0)
+      }
+
+    }
+
+  }
 
   private val buttonAdd by lazy { mView.findViewById<ConstraintLayout>(R.id.buttonAdd) }
   private val buttonAddListener by lazy { OnClickListener { navigateTo(R.id.action_firstFragment_to_cityFragment) } }
@@ -46,7 +58,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     object : Observer {
       override fun notify(observed: Observed) {
         val seasonType = (observed as ObservedValue).getValue()
-        val value = if (seasonType != null) getString((seasonType as SpinnerItem).stringIdx) else ""
+        val value = if (seasonType != null) getString((seasonType as SpinnerItem).string.toInt()) else ""
         textViewArgTemperature.text = value
       }
     }
@@ -58,6 +70,12 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initSpinners()
+    loadCities()
+  }
+
+  private fun loadCities() {
+    val cities = ctx.cityStore.getCities()
+    allCities.updateValue(cities)
   }
 
   private fun initSpinners() {
@@ -65,11 +83,16 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
       ctx.spinnerAdapterFactory.getSpinnerAdapter(SpinnerType.YEAR_SEASONS)
   }
 
+  private fun updateCitySpinner() {
+    spinnerCity.adapter = ctx.spinnerAdapterFactory.getSpinnerAdapter(SpinnerType.CITIES, allCities.getValue() as List<*>)
+  }
+
   override fun onResume() {
     super.onResume()
     spinnerYearSeason.onItemSelectedListener = spinnerYearSeasonListener
     yearSeasonStore.addListener(testObserver)
     buttonAdd.setOnClickListener(buttonAddListener)
+    allCities.addListener(allCitiesObserver)
   }
 
   override fun onStop() {
@@ -77,6 +100,8 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     spinnerYearSeason.onItemSelectedListener = null
     yearSeasonStore.removeListener(testObserver)
     buttonAdd.setOnClickListener(null)
+    allCities.removeListener(allCitiesObserver)
+
   }
 
   private fun navigateTo(actionIdx: Int) {

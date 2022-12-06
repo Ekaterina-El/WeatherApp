@@ -65,11 +65,14 @@ class CityFragment : Fragment(R.layout.city_fragment) {
   private val buttonSaveListener by lazy {
     OnClickListener {
       val city = City(
+        id = null,
         cityNameObserved.getValue() as? String ?: "",
         cityType.getValue() as? CityType ?: CityType.SMALL,
         temperatureType.getValue() as? TemperatureType ?: TemperatureType.CELSIUS,
         monthsAdapter.getMonthsTemperature()
       )
+      ctx.cityStore.addCity(city)
+      ctx.onBackPressed()
     }
    }
 

@@ -23,27 +23,25 @@ class SpinnerWithIconAdapter(context: Context, private val items: List<SpinnerIt
     return view
   }
 
-  override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-    val view = convertView ?: createView(parent, R.layout.spinner_item_with_icon)
-    val item = items[position]
-    inflateView(view, item)
-    return view
-  }
+  override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup) =
+    getView(position, convertView, parent)
 
   private fun inflateView(view: View, item: SpinnerItem) {
-    view.findViewById<TextView>(R.id.textViewValue).text =
-      view.context.getString(item.stringIdx)
+    val textViewValue = view.findViewById<TextView>(R.id.textViewValue)
+    try {
+      item.string.toInt()
+      val text = view.context.getString(item.string.toInt())
+      textViewValue.text = text
+    } catch (_: NumberFormatException) {
+      textViewValue.text = item.string
+    }
 
-
-    if (item.iconIdx != null)
-      view.findViewById<ImageView>(R.id.imageViewIcon)
-        .setImageDrawable(
-          ResourcesCompat.getDrawable(
-            view.resources,
-            item.iconIdx,
-            context.theme
-          )
-        )
+    val imageView = view.findViewById<ImageView>(R.id.imageViewIcon)
+    if (item.iconIdx != null) {
+      val icon = ResourcesCompat.getDrawable(view.resources, item.iconIdx, context.theme)
+      imageView.setImageDrawable(icon)
+      imageView.visibility = View.VISIBLE
+    } else imageView.visibility = View.GONE
   }
 
   private fun createView(parent: ViewGroup, layout: Int): View {
