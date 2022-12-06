@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:paddingHorizontal="10dp"
+  android:paddingVertical="20dp">
+
+  <TextView
+    style="@style/header2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/city" />
+
+  <Spinner
+    android:id="@+id/spinnerCity"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:spinnerMode="dropdown"
+    tools:listitem="@layout/spinner_item" />
+
+  <TextView
+    style="@style/header2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:text="@string/year_season" />
+
+  <Spinner
+    android:id="@+id/spinnerYearSeason"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:spinnerMode="dropdown"
+    tools:listitem="@layout/spinner_item" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:orientation="vertical">
+
+      <TextView
+        style="@style/header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/city_type" />
+
+      <TextView
+        android:id="@+id/textViewCityType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Средний" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:orientation="vertical">
+
+      <TextView
+        style="@style/header2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="center"
+        android:text="@string/arg_tempr" />
+
+      <TextView
+        android:id="@+id/textViewArgTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="+13℃" />
+    </LinearLayout>
+
+  </LinearLayout>
+
+
+</LinearLayout>

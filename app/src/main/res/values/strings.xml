@@ -1,3 +1,8 @@
 <resources>
   <string name="app_name">WeatherApp</string>
+  <string name="city_example">Смоленск</string>
+  <string name="city">Город</string>
+  <string name="year_season">Сезон года</string>
+  <string name="city_type">Тип города</string>
+  <string name="arg_tempr">Средняя температура</string>
 </resources>
