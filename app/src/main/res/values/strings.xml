@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">WeatherApp</string>
+  <string name="app_name">Weather App</string>
   <string name="city_example">Смоленск</string>
   <string name="city">Город</string>
   <string name="year_season">Сезон года</string>
@@ -10,4 +10,8 @@
   <string name="summer">Лето</string>
   <string name="autumn">Осень</string>
   <string name="winter">Зима</string>
+  <string name="city_name">Название города</string>
+  <string name="months_tempr">Температура по месяцам</string>
+  <string name="temp_type">Единицы измерения температуры</string>
+  <string name="save_btn">Сохранить</string>
 </resources>

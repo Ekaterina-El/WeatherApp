@@ -17,23 +17,23 @@ class YearSeasonAdapter(context: Context, private val items: List<YearSeasonType
   private val layoutInflater: LayoutInflater by lazy { LayoutInflater.from(context) }
 
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-    val view = convertView ?: createView(parent, R.layout.year_season_spinner_item)
+    val view = convertView ?: createView(parent, R.layout.spinner_item_with_icon)
     val item = items[position]
     inflateView(view, item)
     return view
   }
 
   override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-    val view = convertView ?: createView(parent, R.layout.year_season_spinner_item)
+    val view = convertView ?: createView(parent, R.layout.spinner_item_with_icon)
     val item = items[position]
     inflateView(view, item)
     return view
   }
 
   private fun inflateView(view: View, item: YearSeasonType) {
-    view.findViewById<TextView>(R.id.textViewSeasonValue).text =
+    view.findViewById<TextView>(R.id.textViewValue).text =
       view.context.getString(item.strIdx)
-    view.findViewById<ImageView>(R.id.imageViewSeasonIcon)
+    view.findViewById<ImageView>(R.id.imageViewIcon)
       .setImageDrawable(
         ResourcesCompat.getDrawable(
           view.resources,

@@ -3,10 +3,13 @@ package el.ka.weatherapp.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import el.ka.weatherapp.R
 import el.ka.weatherapp.data.model.SpinnerType
 import el.ka.weatherapp.data.model.YearSeasonType
@@ -18,10 +21,14 @@ import el.ka.weatherapp.observer.YearSeasonStore
 class FirstFragment : Fragment(R.layout.first_fragment) {
   private val ctx: Context by lazy { requireContext() }
   private val mView: View by lazy { requireView() }
+  private val navController by lazy { findNavController() }
 
   private val spinnerAdapterFactory by lazy { SpinnerAdapterFactory(ctx) }
 
   private val spinnerCity: Spinner by lazy { mView.findViewById(R.id.spinnerCity) }
+
+  private val buttonAdd by lazy { mView.findViewById<ConstraintLayout>(R.id.buttonAdd) }
+  private val buttonAddListener by lazy { OnClickListener { navigateTo(R.id.action_firstFragment_to_cityFragment) } }
 
   private val spinnerYearSeason: Spinner by lazy { mView.findViewById(R.id.spinnerYearSeason) }
   private val yearSeasonStore by lazy { YearSeasonStore() }
@@ -63,11 +70,17 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     super.onResume()
     spinnerYearSeason.onItemSelectedListener = spinnerYearSeasonListener
     yearSeasonStore.addListener(testObserver)
+    buttonAdd.setOnClickListener(buttonAddListener)
   }
 
   override fun onStop() {
     super.onStop()
     spinnerYearSeason.onItemSelectedListener = null
     yearSeasonStore.removeListener(testObserver)
+    buttonAdd.setOnClickListener(null)
+  }
+
+  private fun navigateTo(actionIdx: Int) {
+    navController.navigate(actionIdx)
   }
 }
