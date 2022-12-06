@@ -5,4 +5,9 @@
   <string name="year_season">Сезон года</string>
   <string name="city_type">Тип города</string>
   <string name="arg_tempr">Средняя температура</string>
+
+  <string name="spring">Весна</string>
+  <string name="summer">Лето</string>
+  <string name="autumn">Осень</string>
+  <string name="winter">Зима</string>
 </resources>

@@ -10,6 +10,7 @@
   <TextView
     style="@style/header2"
     android:layout_width="match_parent"
+    android:layout_marginBottom="5dp"
     android:layout_height="wrap_content"
     android:text="@string/city" />
 
@@ -18,12 +19,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:spinnerMode="dropdown"
-    tools:listitem="@layout/spinner_item" />
+    tools:listitem="@layout/year_season_spinner_item" />
 
   <TextView
     style="@style/header2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     android:layout_marginTop="20dp"
     android:text="@string/year_season" />
 
@@ -32,19 +34,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:spinnerMode="dropdown"
-    tools:listitem="@layout/spinner_item" />
+    tools:listitem="@layout/year_season_spinner_item" />
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
-    android:gravity="center"
-    android:orientation="horizontal">
 
     <LinearLayout
-      android:layout_width="0dp"
+      android:layout_marginTop="30dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
       android:gravity="center"
       android:orientation="vertical">
 
@@ -63,9 +59,9 @@
     </LinearLayout>
 
     <LinearLayout
-      android:layout_width="0dp"
+      android:layout_marginTop="30dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
       android:gravity="center"
       android:orientation="vertical">
 
@@ -83,8 +79,6 @@
         android:layout_height="wrap_content"
         tools:text="+13℃" />
     </LinearLayout>
-
-  </LinearLayout>
 
 
 </LinearLayout>
