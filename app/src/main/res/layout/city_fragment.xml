@@ -1,77 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:paddingHorizontal="@dimen/app_horizontal_padding"
-  android:paddingVertical="@dimen/app_vertical_padding">
+  android:overScrollMode="never"
+  android:layout_height="match_parent">
 
-  <com.google.android.material.textfield.TextInputLayout
-    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/city_name">
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/app_horizontal_padding"
+    android:paddingVertical="@dimen/app_vertical_padding">
 
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/editTextViewCityName"
+    <com.google.android.material.textfield.TextInputLayout
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-  </com.google.android.material.textfield.TextInputLayout>
+      android:layout_height="wrap_content"
+      android:hint="@string/city_name">
 
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
-    android:layout_marginBottom="5dp"
-    android:text="@string/city_type" />
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/editTextViewCityName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-  <Spinner
-    android:id="@+id/spinnerCityType"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:listitem="@layout/spinner_item_with_icon" />
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:layout_marginBottom="5dp"
+      android:text="@string/city_type" />
 
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
-    android:layout_marginBottom="5dp"
-    android:text="@string/temp_type" />
+    <Spinner
+      android:id="@+id/spinnerCityType"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/spinner_item_with_icon" />
 
-  <Spinner
-    android:id="@+id/spinnerTempType"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:listitem="@layout/spinner_item_with_icon" />
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:layout_marginBottom="5dp"
+      android:text="@string/temp_type" />
+
+    <Spinner
+      android:id="@+id/spinnerTempType"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:listitem="@layout/spinner_item_with_icon" />
 
 
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="5dp"
-    android:text="@string/months_tempr" />
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:layout_marginBottom="5dp"
+      android:text="@string/months_tempr" />
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerViewDegrees"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:nestedScrollingEnabled="false"
-    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-    app:spanCount="2"
-    tools:listitem="@layout/month_tempr_input_item" />
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recyclerViewDegrees"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:nestedScrollingEnabled="false"
+      app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+      app:spanCount="2"
+      tools:listitem="@layout/month_tempr_input_item" />
 
-  <Button
-    android:id="@+id/buttonSave"
-    android:layout_marginTop="20dp"
-    style="@style/button"
-    app:backgroundTint="@null"
-    android:background="@drawable/button"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/save_btn"
-    android:textAllCaps="false" />
+    <Button
+      android:id="@+id/buttonSave"
+      style="@style/button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:background="@drawable/button"
+      android:text="@string/save_btn"
+      android:textAllCaps="false"
+      app:backgroundTint="@null" />
 
-</LinearLayout>
+  </LinearLayout>
+</androidx.core.widget.NestedScrollView>

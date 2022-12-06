@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import el.ka.weatherapp.MainActivity
 import el.ka.weatherapp.R
+import el.ka.weatherapp.adapter.MonthsAdapter
 import el.ka.weatherapp.data.model.*
 import el.ka.weatherapp.observer.ObservedValue
 
@@ -51,16 +52,23 @@ class CityFragment : Fragment(R.layout.city_fragment) {
     }
   }
 
-  private val recyclerViewDegrees by lazy { mView.findViewById<RecyclerView>(R.id.recyclerViewDegrees) }
+
+  private val months by lazy {
+    resources.getStringArray(R.array.months).map {
+      MonthTemperature(it, 0.0)
+    }
+  }
+  private val monthsAdapter by lazy { MonthsAdapter(months) }
+  private val recyclerViewMonths by lazy { mView.findViewById<RecyclerView>(R.id.recyclerViewDegrees) }
 
   private val buttonSave by lazy { mView.findViewById<Button>(R.id.buttonSave) }
   private val buttonSaveListener by lazy {
     OnClickListener {
       val city = City(
-        cityNameObserved.getValue() as String,
-        cityType.getValue() as CityType,
-        temperatureType.getValue() as TemperatureType,
-        listOf()
+        cityNameObserved.getValue() as? String ?: "",
+        cityType.getValue() as? CityType ?: CityType.SMALL,
+        temperatureType.getValue() as? TemperatureType ?: TemperatureType.CELSIUS,
+        monthsAdapter.getMonthsTemperature()
       )
     }
    }
@@ -71,6 +79,11 @@ class CityFragment : Fragment(R.layout.city_fragment) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initSpinners()
+    initMonthsRecyclerView()
+  }
+
+  private fun initMonthsRecyclerView() {
+    recyclerViewMonths.adapter = monthsAdapter
   }
 
   private fun initSpinners() {

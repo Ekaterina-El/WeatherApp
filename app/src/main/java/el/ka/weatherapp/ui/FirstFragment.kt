@@ -13,7 +13,6 @@ import el.ka.weatherapp.MainActivity
 import el.ka.weatherapp.R
 import el.ka.weatherapp.data.model.SpinnerItem
 import el.ka.weatherapp.data.model.SpinnerType
-import el.ka.weatherapp.data.model.YearSeasonType
 import el.ka.weatherapp.observer.Observed
 import el.ka.weatherapp.observer.ObservedValue
 import el.ka.weatherapp.observer.Observer
