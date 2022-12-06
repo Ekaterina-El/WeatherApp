@@ -1,6 +1,5 @@
 package el.ka.weatherapp.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -10,20 +9,20 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import el.ka.weatherapp.MainActivity
 import el.ka.weatherapp.R
+import el.ka.weatherapp.data.model.SpinnerItem
 import el.ka.weatherapp.data.model.SpinnerType
 import el.ka.weatherapp.data.model.YearSeasonType
-import el.ka.weatherapp.factory.SpinnerAdapterFactory
 import el.ka.weatherapp.observer.Observed
+import el.ka.weatherapp.observer.ObservedValue
 import el.ka.weatherapp.observer.Observer
-import el.ka.weatherapp.observer.YearSeasonStore
 
 class FirstFragment : Fragment(R.layout.first_fragment) {
-  private val ctx: Context by lazy { requireContext() }
-  private val mView: View by lazy { requireView() }
+  private val ctx by lazy { requireContext() as MainActivity }
+  private val mView by lazy { requireView() }
   private val navController by lazy { findNavController() }
 
-  private val spinnerAdapterFactory by lazy { SpinnerAdapterFactory(ctx) }
 
   private val spinnerCity: Spinner by lazy { mView.findViewById(R.id.spinnerCity) }
 
@@ -31,11 +30,11 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   private val buttonAddListener by lazy { OnClickListener { navigateTo(R.id.action_firstFragment_to_cityFragment) } }
 
   private val spinnerYearSeason: Spinner by lazy { mView.findViewById(R.id.spinnerYearSeason) }
-  private val yearSeasonStore by lazy { YearSeasonStore() }
+  private val yearSeasonStore by lazy { ObservedValue() }
   private val spinnerYearSeasonListener by lazy {
     object : AdapterView.OnItemSelectedListener {
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-        yearSeasonStore.updateYearSeasonType(parent!!.getItemAtPosition(pos) as YearSeasonType)
+        yearSeasonStore.updateValue(parent!!.getItemAtPosition(pos))
       }
 
       override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -47,8 +46,8 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   private val testObserver by lazy {
     object : Observer {
       override fun notify(observed: Observed) {
-        val seasonType = (observed as YearSeasonStore).getYearSeasonType()
-        val value = if (seasonType != null) getString(seasonType.strIdx) else ""
+        val seasonType = (observed as ObservedValue).getValue()
+        val value = if (seasonType != null) getString((seasonType as SpinnerItem).stringIdx) else ""
         textViewArgTemperature.text = value
       }
     }
@@ -63,7 +62,8 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   }
 
   private fun initSpinners() {
-    spinnerYearSeason.adapter = spinnerAdapterFactory.getSpinnerAdapter(SpinnerType.YEAR_SEASONS)
+    spinnerYearSeason.adapter =
+      ctx.spinnerAdapterFactory.getSpinnerAdapter(SpinnerType.YEAR_SEASONS)
   }
 
   override fun onResume() {

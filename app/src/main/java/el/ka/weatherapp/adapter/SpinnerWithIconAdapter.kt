@@ -10,10 +10,10 @@ import android.widget.SpinnerAdapter
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import el.ka.weatherapp.R
-import el.ka.weatherapp.data.model.YearSeasonType
+import el.ka.weatherapp.data.model.SpinnerItem
 
-class YearSeasonAdapter(context: Context, private val items: List<YearSeasonType>) :
-  ArrayAdapter<YearSeasonType>(context, 0, items), SpinnerAdapter {
+class SpinnerWithIconAdapter(context: Context, private val items: List<SpinnerItem>) :
+  ArrayAdapter<SpinnerItem>(context, 0, items), SpinnerAdapter {
   private val layoutInflater: LayoutInflater by lazy { LayoutInflater.from(context) }
 
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -30,17 +30,20 @@ class YearSeasonAdapter(context: Context, private val items: List<YearSeasonType
     return view
   }
 
-  private fun inflateView(view: View, item: YearSeasonType) {
+  private fun inflateView(view: View, item: SpinnerItem) {
     view.findViewById<TextView>(R.id.textViewValue).text =
-      view.context.getString(item.strIdx)
-    view.findViewById<ImageView>(R.id.imageViewIcon)
-      .setImageDrawable(
-        ResourcesCompat.getDrawable(
-          view.resources,
-          item.iconIdx,
-          context.theme
+      view.context.getString(item.stringIdx)
+
+
+    if (item.iconIdx != null)
+      view.findViewById<ImageView>(R.id.imageViewIcon)
+        .setImageDrawable(
+          ResourcesCompat.getDrawable(
+            view.resources,
+            item.iconIdx,
+            context.theme
+          )
         )
-      )
   }
 
   private fun createView(parent: ViewGroup, layout: Int): View {

@@ -1,16 +1,13 @@
 package el.ka.weatherapp.observer
 
-import el.ka.weatherapp.data.model.YearSeasonType
-
-class YearSeasonStore: Observed {
-  private var yearSeasonType: YearSeasonType? = null
+class ObservedValue: Observed {
+  private var value: Any? = null
   private val observers = mutableListOf<Observer>()
 
-  fun getYearSeasonType() = yearSeasonType
+  fun getValue() = value
 
-  fun updateYearSeasonType(type: YearSeasonType) {
-    yearSeasonType = type
-    println(type)
+  fun updateValue(value: Any) {
+    this.value = value
     notifyObservers()
   }
 

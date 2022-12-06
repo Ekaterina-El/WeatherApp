@@ -14,4 +14,10 @@
   <string name="months_tempr">Температура по месяцам</string>
   <string name="temp_type">Единицы измерения температуры</string>
   <string name="save_btn">Сохранить</string>
+  <string name="big_city">Большой</string>
+  <string name="small_city">Маленький</string>
+  <string name="medium_city">Средний</string>
+  <string name="celsius">по Цельсию</string>
+  <string name="fahrenheit">По Фаренгейту</string>
+  <string name="kelvin">По Кельвину</string>
 </resources>
