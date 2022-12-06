@@ -7,7 +7,8 @@
   android:gravity="center"
   android:orientation="horizontal"
   android:paddingHorizontal="10dp"
-  android:paddingVertical="10dp">
+  android:paddingVertical="10dp"
+  tools:ignore="UseCompoundDrawables">
 
   <ImageView
     android:id="@+id/imageViewIcon"

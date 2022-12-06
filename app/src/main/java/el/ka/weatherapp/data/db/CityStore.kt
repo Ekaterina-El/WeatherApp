@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
 import el.ka.weatherapp.data.model.City
+import el.ka.weatherapp.data.model.CityType
+import el.ka.weatherapp.data.model.TemperatureType
 
 class CityStore(private val context: Context) {
   private val dbHelper by lazy { CityDbHelper(context) }
@@ -49,4 +51,37 @@ class CityStore(private val context: Context) {
   }
 
   fun closeDb() = dbHelper.close()
+
+  fun getCityById(cityId: Long): City {
+    val db = dbHelper.readableDatabase
+    val projection = arrayOf(
+      BaseColumns._ID,
+      CityDbContract.CityEntry.COLUMN_NAME,
+      CityDbContract.CityEntry.COLUMN_TYPE,
+      CityDbContract.CityEntry.COLUMN_MONTHS_TEMPERATURE,
+      CityDbContract.CityEntry.COLUMN_TEMPERATURE_TYPE,
+    )
+
+    val sel = "${BaseColumns._ID} = ?"
+    val selArg = arrayOf(cityId.toString())
+
+    val cursor =
+      db.query(CityDbContract.CityEntry.TABLE_NAME, projection, sel, selArg, null, null, null)
+    cursor.moveToFirst()
+
+    val city = City()
+    with(cursor) {
+      city.id = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+      city.name = getString(getColumnIndexOrThrow(CityDbContract.CityEntry.COLUMN_NAME))
+      city.type =
+        CityType.valueOf(getString(getColumnIndexOrThrow(CityDbContract.CityEntry.COLUMN_TYPE)))
+      city.tempType =
+        TemperatureType.valueOf(getString(getColumnIndexOrThrow(CityDbContract.CityEntry.COLUMN_TEMPERATURE_TYPE)))
+      city.temps =
+        getString(getColumnIndexOrThrow(CityDbContract.CityEntry.COLUMN_MONTHS_TEMPERATURE))
+          .split(CityDbContract.CityEntry.TEMPERATURE_SPLITER).map { it.toDouble() }
+    }
+    cursor.close()
+    return city
+  }
 }

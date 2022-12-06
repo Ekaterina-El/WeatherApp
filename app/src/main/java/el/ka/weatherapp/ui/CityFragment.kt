@@ -45,10 +45,7 @@ class CityFragment : Fragment(R.layout.city_fragment) {
         temperatureType.updateValue((parent!!.getItemAtPosition(pos) as SpinnerItem).programValue)
       }
 
-      override fun onNothingSelected(p0: AdapterView<*>?) {
-        spinnerTempType.setSelection(0)
-      }
-
+      override fun onNothingSelected(p0: AdapterView<*>?) { spinnerTempType.setSelection(0) }
     }
   }
 
