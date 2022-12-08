@@ -20,8 +20,7 @@ import el.ka.weatherapp.observer.ObservedValue
 import el.ka.weatherapp.observer.Observer
 import el.ka.weatherapp.ui.CityFragment.Companion.CITY_ID
 
-// TODO: Выводить средней температуры выбраного сезона в выбранном городе
-// TODO: Экспорт в Excel 
+// TODO: Экспорт в Excel
 
 class FirstFragment : Fragment() {
   private val ctx by lazy { requireContext() as MainActivity }
