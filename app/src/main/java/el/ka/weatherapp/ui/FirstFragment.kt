@@ -14,10 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import el.ka.weatherapp.MainActivity
 import el.ka.weatherapp.R
-import el.ka.weatherapp.data.model.City
-import el.ka.weatherapp.data.model.SpinnerItem
-import el.ka.weatherapp.data.model.SpinnerType
-import el.ka.weatherapp.data.model.YearSeasonType
+import el.ka.weatherapp.data.model.*
 import el.ka.weatherapp.observer.Observed
 import el.ka.weatherapp.observer.ObservedValue
 import el.ka.weatherapp.observer.Observer
@@ -91,6 +88,19 @@ class FirstFragment : Fragment() {
   private lateinit var buttonAdd: ConstraintLayout
   private val buttonAddListener by lazy { OnClickListener { navigateToCityFragment() } }
 
+  private lateinit var spinnerTempType: Spinner
+  private val toTemperatureType by lazy { ObservedValue() }
+  private val spinnerTempTypeListener by lazy {
+    object : AdapterView.OnItemSelectedListener {
+      override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+        toTemperatureType.updateValue((parent!!.getItemAtPosition(pos) as SpinnerItem).programValue)
+      }
+
+      override fun onNothingSelected(p0: AdapterView<*>?) { spinnerYearSeason.setSelection(0) }
+    }
+  }
+
+
   private lateinit var spinnerYearSeason: Spinner
   private val yearSeasonStore by lazy { ObservedValue() }
   private val spinnerYearSeasonListener by lazy {
@@ -108,10 +118,12 @@ class FirstFragment : Fragment() {
   private fun initUI() {
     val mView = requireView()
 
+
     textViewArgTemperature = mView.findViewById(R.id.textViewArgTemperature)
     textViewCityType = mView.findViewById(R.id.textViewCityType)
     buttonAdd = mView.findViewById(R.id.buttonAdd)
     spinnerCity = mView.findViewById(R.id.spinnerCity)
+    spinnerTempType = mView.findViewById(R.id.spinnerTempType)
     imageViewEditCity = mView.findViewById(R.id.imageViewEditCity)
     imageViewDeleteCity = mView.findViewById(R.id.imageViewDeleteCity)
     spinnerYearSeason = mView.findViewById(R.id.spinnerYearSeason)
@@ -134,8 +146,10 @@ class FirstFragment : Fragment() {
   }
 
   private fun initSpinners() {
-    val adapter = ctx.spinnerAdapterFactory.getSpinnerAdapter(SpinnerType.YEAR_SEASONS)
-    spinnerYearSeason.adapter = adapter
+    val factory = ctx.spinnerAdapterFactory
+    spinnerYearSeason.adapter = factory.getSpinnerAdapter(SpinnerType.YEAR_SEASONS)
+    spinnerTempType.adapter = factory.getSpinnerAdapter(SpinnerType.TEMPERATURE_TYPE)
+
   }
 
   private fun updateCitySpinner() {
@@ -160,7 +174,7 @@ class FirstFragment : Fragment() {
         textViewCityType.setText(city.type!!.stringIdx)
 
         if (yearSeason == null) return
-        textViewArgTemperature.text = calculateAverageTemperature(city.temps, yearSeason)
+        textViewArgTemperature.text = calculateAverageTemperature(city.temps, yearSeason, city.tempType!!)
       }
 
     }
@@ -168,9 +182,17 @@ class FirstFragment : Fragment() {
 
   private fun calculateAverageTemperature(
     temps: List<Double>?,
-    yearSeason: YearSeasonType
+    yearSeason: YearSeasonType,
+    currentTemperatureType: TemperatureType
   ): String {
-    return "+34℃"
+    val toTemperatureType = this.toTemperatureType.getValue() as? TemperatureType
+
+    if (temps == null || temps.size != 12 || toTemperatureType == null) return ""
+
+    val temps = yearSeason.months.map { temps[it] }.average()
+    val value = ctx.convertor.convert(temps, currentTemperatureType, toTemperatureType)
+    val unit = ctx.convertor.getUnit(toTemperatureType)
+    return "$value$unit"
   }
 
   private fun navigateToCityFragment(cityId: String? = null) {
@@ -183,6 +205,7 @@ class FirstFragment : Fragment() {
     super.onResume()
     spinnerYearSeason.onItemSelectedListener = spinnerYearSeasonListener
     spinnerCity.onItemSelectedListener = spinnerCityListener
+    spinnerTempType.onItemSelectedListener = spinnerTempTypeListener
 
     buttonAdd.setOnClickListener(buttonAddListener)
     imageViewEditCity.setOnClickListener(editCityListener)
@@ -191,15 +214,18 @@ class FirstFragment : Fragment() {
     allCities.addListener(allCitiesObserver)
     currentCity.addListener(updatedCityDate)
     yearSeasonStore.addListener(updatedCityDate)
+    toTemperatureType.addListener(updatedCityDate)
   }
 
   override fun onStop() {
     super.onStop()
     spinnerYearSeason.onItemSelectedListener = null
     spinnerCity.onItemSelectedListener = null
+
     allCities.removeListener(allCitiesObserver)
     currentCity.removeListener(updatedCityDate)
     yearSeasonStore.removeListener(updatedCityDate)
+    toTemperatureType.removeListener(updatedCityDate)
 
     buttonAdd.setOnClickListener(null)
     imageViewEditCity.setOnClickListener(null)

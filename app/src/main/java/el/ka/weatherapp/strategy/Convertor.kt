@@ -7,13 +7,13 @@ class Convertor {
   private val fahrenheit by lazy { Fahrenheit() }
   private val kelvin by lazy { Kelvin() }
 
-  fun convert(num: Double, from: TemperatureType, to: TemperatureType) {
+  fun convert(num: Double, from: TemperatureType, to: TemperatureType): Double {
     val strategy = when(from) {
       TemperatureType.CELSIUS -> celsius
       TemperatureType.FAHRENHEIT -> fahrenheit
       TemperatureType.KELVIN -> kelvin
     }
-    strategy.convertTo(num, to)
+    return strategy.convertTo(num, to)
   }
 
   private fun TemperatureStrategy.convertTo(value: Double, to: TemperatureType): Double {
@@ -21,6 +21,14 @@ class Convertor {
       TemperatureType.CELSIUS -> this.convertToCelsius(value)
       TemperatureType.FAHRENHEIT -> this.convertToFahrenheit(value)
       TemperatureType.KELVIN -> this.convertToKelvin(value)
+    }
+  }
+
+  fun getUnit(toTemperatureType: TemperatureType): String {
+    return when(toTemperatureType) {
+      TemperatureType.CELSIUS -> "°C"
+      TemperatureType.FAHRENHEIT -> "°F"
+      TemperatureType.KELVIN -> "°K"
     }
   }
 }

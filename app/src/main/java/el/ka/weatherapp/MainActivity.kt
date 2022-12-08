@@ -8,10 +8,12 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import el.ka.weatherapp.data.db.CityStore
 import el.ka.weatherapp.factory.SpinnerAdapterFactory
+import el.ka.weatherapp.strategy.Convertor
 
 class MainActivity : AppCompatActivity() {
   val spinnerAdapterFactory by lazy { SpinnerAdapterFactory(this) }
   val cityStore by lazy { CityStore(this) }
+  val convertor by lazy { Convertor() }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
