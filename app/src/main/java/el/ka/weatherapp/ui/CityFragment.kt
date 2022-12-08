@@ -19,15 +19,12 @@ import el.ka.weatherapp.observer.ObservedValue
 
 class CityFragment : Fragment(R.layout.city_fragment) {
   private var state = State.ADD
-
   private val factory by lazy { ctx.spinnerAdapterFactory }
-
   private val ctx by lazy { requireContext() as MainActivity }
-  private val mView by lazy { requireView() }
 
-  private val textViewCityName by lazy { mView.findViewById<EditText>(R.id.editTextViewCityName) }
+  private lateinit var textViewCityName: EditText
 
-  private val spinnerCityType by lazy { mView.findViewById<Spinner>(R.id.spinnerCityType) }
+  private lateinit var spinnerCityType: Spinner
   private val cityType by lazy { ObservedValue() }
   private val spinnerItemListener by lazy {
     object : AdapterView.OnItemSelectedListener {
@@ -41,7 +38,7 @@ class CityFragment : Fragment(R.layout.city_fragment) {
     }
   }
 
-  private val spinnerTempType by lazy { mView.findViewById<Spinner>(R.id.spinnerTempType) }
+  private lateinit var spinnerTempType: Spinner
   private val temperatureType by lazy { ObservedValue() }
   private val spinnerTempListener by lazy {
     object : AdapterView.OnItemSelectedListener {
@@ -62,11 +59,12 @@ class CityFragment : Fragment(R.layout.city_fragment) {
       MonthTemperature(month, t[idx])
     }
   }
+
   private lateinit var monthsAdapter: MonthsAdapter
-  private val recyclerViewMonths by lazy { mView.findViewById<RecyclerView>(R.id.recyclerViewDegrees) }
+  private lateinit var recyclerViewMonths: RecyclerView
 
   private var currentID: Long? = null
-  private val buttonSave by lazy { mView.findViewById<Button>(R.id.buttonSave) }
+  private lateinit var buttonSave: Button
   private val buttonSaveListener by lazy {
     OnClickListener {
       val city = City(
@@ -88,8 +86,19 @@ class CityFragment : Fragment(R.layout.city_fragment) {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    initUI()
     initSpinners()
     getCityId()
+  }
+
+  private fun initUI() {
+    val mView = requireView()
+
+    spinnerTempType = mView.findViewById(R.id.spinnerTempType)
+    spinnerCityType = mView.findViewById(R.id.spinnerCityType)
+    textViewCityName = mView.findViewById(R.id.editTextViewCityName)
+    recyclerViewMonths = mView.findViewById(R.id.recyclerViewDegrees)
+    buttonSave = mView.findViewById(R.id.buttonSave)
   }
 
   private fun getCityId() {

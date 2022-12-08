@@ -1,8 +1,10 @@
 package el.ka.weatherapp.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.Spinner
@@ -21,17 +23,22 @@ import el.ka.weatherapp.observer.ObservedValue
 import el.ka.weatherapp.observer.Observer
 import el.ka.weatherapp.ui.CityFragment.Companion.CITY_ID
 
-// TODO: Удаление города
-// TODO: Решить проблему с возвратом на экран city (не загружаются данные)
 // TODO: Выводить средней температуры выбраного сезона в выбранном городе
 // TODO: Экспорт в Excel 
 
-class FirstFragment : Fragment(R.layout.first_fragment) {
+class FirstFragment : Fragment() {
   private val ctx by lazy { requireContext() as MainActivity }
-  private val mView by lazy { requireView() }
   private val navController by lazy { findNavController() }
 
-  private val imageViewDeleteCity: ImageView by lazy { mView.findViewById(R.id.imageViewDeleteCity) }
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    return inflater.inflate(R.layout.first_fragment, container, false)
+  }
+
+  private lateinit var imageViewDeleteCity: ImageView
   private val deleteCityListener by lazy {
     OnClickListener {
       val cityId = (currentCity.getValue() as City).id
@@ -40,7 +47,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     }
   }
 
-  private val imageViewEditCity: ImageView by lazy { mView.findViewById(R.id.imageViewEditCity) }
+  private lateinit var imageViewEditCity: ImageView
   private val editCityListener by lazy {
     OnClickListener {
       val city = currentCity.getValue() as? City
@@ -49,7 +56,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     }
   }
 
-  private val spinnerCity: Spinner by lazy { mView.findViewById(R.id.spinnerCity) }
+  private lateinit var spinnerCity: Spinner
   private val currentCity by lazy { ObservedValue() }
   private val spinnerCityListener by lazy {
     object : AdapterView.OnItemSelectedListener {
@@ -69,11 +76,11 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   private val allCitiesObserver by lazy {
     object : Observer {
       override fun notify(observed: Observed) {
-        val a =
-          ((observed as ObservedValue).getValue() as List<*>).mapNotNull { if (it is City) it else null }
+        val a = ((observed as ObservedValue).getValue() as List<*>)
+          .mapNotNull { if (it is City) it else null }
 
-        imageViewEditCity.visibility = if (a.isEmpty())  View.GONE else View.VISIBLE
-        imageViewDeleteCity.visibility = if (a.isEmpty())  View.GONE else View.VISIBLE
+        imageViewEditCity.visibility = if (a.isEmpty()) View.GONE else View.VISIBLE
+        imageViewDeleteCity.visibility = if (a.isEmpty()) View.GONE else View.VISIBLE
 
         updateCitySpinner()
         if (a.isNotEmpty()) spinnerCity.setSelection(0)
@@ -81,10 +88,10 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     }
   }
 
-  private val buttonAdd by lazy { mView.findViewById<ConstraintLayout>(R.id.buttonAdd) }
+  private lateinit var buttonAdd: ConstraintLayout
   private val buttonAddListener by lazy { OnClickListener { navigateToCityFragment() } }
 
-  private val spinnerYearSeason: Spinner by lazy { mView.findViewById(R.id.spinnerYearSeason) }
+  private lateinit var spinnerYearSeason: Spinner
   private val yearSeasonStore by lazy { ObservedValue() }
   private val spinnerYearSeasonListener by lazy {
     object : AdapterView.OnItemSelectedListener {
@@ -98,12 +105,25 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     }
   }
 
+  private fun initUI() {
+    val mView = requireView()
 
-  private val textViewCityType: TextView by lazy { mView.findViewById(R.id.textViewCityType) }
-  private val textViewArgTemperature: TextView by lazy { mView.findViewById(R.id.textViewArgTemperature) }
+    textViewArgTemperature = mView.findViewById(R.id.textViewArgTemperature)
+    textViewCityType = mView.findViewById(R.id.textViewCityType)
+    buttonAdd = mView.findViewById(R.id.buttonAdd)
+    spinnerCity = mView.findViewById(R.id.spinnerCity)
+    imageViewEditCity = mView.findViewById(R.id.imageViewEditCity)
+    imageViewDeleteCity = mView.findViewById(R.id.imageViewDeleteCity)
+    spinnerYearSeason = mView.findViewById(R.id.spinnerYearSeason)
+  }
+
+
+  private lateinit var textViewCityType: TextView
+  private lateinit var textViewArgTemperature: TextView
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    initUI()
     initSpinners()
     loadCities()
   }
@@ -114,8 +134,8 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   }
 
   private fun initSpinners() {
-    spinnerYearSeason.adapter =
-      ctx.spinnerAdapterFactory.getSpinnerAdapter(SpinnerType.YEAR_SEASONS)
+    val adapter = ctx.spinnerAdapterFactory.getSpinnerAdapter(SpinnerType.YEAR_SEASONS)
+    spinnerYearSeason.adapter = adapter
   }
 
   private fun updateCitySpinner() {
