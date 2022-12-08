@@ -21,8 +21,7 @@ import el.ka.weatherapp.observer.ObservedValue
 import el.ka.weatherapp.observer.Observer
 import el.ka.weatherapp.ui.CityFragment.Companion.CITY_ID
 
-// TODO: Открытие на редактирование  города
-// TODO: Удаление города 
+// TODO: Удаление города
 // TODO: Решить проблему с возвратом на экран city (не загружаются данные)
 // TODO: Выводить средней температуры выбраного сезона в выбранном городе
 // TODO: Экспорт в Excel 
@@ -31,6 +30,15 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   private val ctx by lazy { requireContext() as MainActivity }
   private val mView by lazy { requireView() }
   private val navController by lazy { findNavController() }
+
+  private val imageViewDeleteCity: ImageView by lazy { mView.findViewById(R.id.imageViewDeleteCity) }
+  private val deleteCityListener by lazy {
+    OnClickListener {
+      val cityId = (currentCity.getValue() as City).id
+      ctx.cityStore.deleteCity(cityId)
+      loadCities()
+    }
+  }
 
   private val imageViewEditCity: ImageView by lazy { mView.findViewById(R.id.imageViewEditCity) }
   private val editCityListener by lazy {
@@ -63,7 +71,10 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
       override fun notify(observed: Observed) {
         val a =
           ((observed as ObservedValue).getValue() as List<*>).mapNotNull { if (it is City) it else null }
+
         imageViewEditCity.visibility = if (a.isEmpty())  View.GONE else View.VISIBLE
+        imageViewDeleteCity.visibility = if (a.isEmpty())  View.GONE else View.VISIBLE
+
         updateCitySpinner()
         if (a.isNotEmpty()) spinnerCity.setSelection(0)
       }
@@ -155,6 +166,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
 
     buttonAdd.setOnClickListener(buttonAddListener)
     imageViewEditCity.setOnClickListener(editCityListener)
+    imageViewDeleteCity.setOnClickListener(deleteCityListener)
 
     allCities.addListener(allCitiesObserver)
     currentCity.addListener(updatedCityDate)

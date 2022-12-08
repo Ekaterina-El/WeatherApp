@@ -64,6 +64,16 @@
       android:focusable="true"
       android:src="@drawable/ic_edit"
       app:tint="@color/primary_color_dark" />
+
+    <ImageView
+      android:id="@+id/imageViewDeleteCity"
+      android:layout_width="22dp"
+      android:layout_height="22dp"
+      android:clickable="true"
+      android:focusable="true"
+      android:src="@drawable/ic_delete"
+      android:layout_marginStart="10dp"
+      app:tint="@color/primary_color_dark" />
   </LinearLayout>
 
 

@@ -97,4 +97,14 @@ class CityStore(private val context: Context) {
     cursor.close()
     return city
   }
+
+  fun deleteCity(cityId: Long?) {
+    val db = dbHelper.writableDatabase
+
+    val where = "${BaseColumns._ID} = ?"
+    val whereArgs = arrayOf(cityId.toString())
+    db.delete(CityDbContract.CityEntry.TABLE_NAME, where, whereArgs)
+
+    db.close()
+  }
 }
