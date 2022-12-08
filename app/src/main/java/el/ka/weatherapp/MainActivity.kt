@@ -2,6 +2,7 @@ package el.ka.weatherapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
@@ -20,5 +21,9 @@ class MainActivity : AppCompatActivity() {
   override fun onDestroy() {
     super.onDestroy()
     cityStore.closeDb()
+  }
+
+  fun navigateTo(navController: NavController, actionIdx: Int, args: Bundle? = null) {
+    navController.navigate(actionIdx, args)
   }
 }

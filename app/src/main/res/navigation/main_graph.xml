@@ -15,5 +15,11 @@
   <fragment
     android:id="@+id/cityFragment"
     android:name="el.ka.weatherapp.ui.CityFragment"
-    android:label="CityFragment" />
+    android:label="CityFragment" >
+    <argument
+      android:name="cityId"
+      app:argType="string"
+      app:nullable="true"
+      android:defaultValue="null" />
+  </fragment>
 </navigation>

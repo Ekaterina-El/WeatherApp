@@ -10,7 +10,7 @@ import el.ka.weatherapp.data.model.TemperatureType
 class CityStore(private val context: Context) {
   private val dbHelper by lazy { CityDbHelper(context) }
 
-  fun addCity(city: City) {
+  fun saveCity(city: City, isEdit: Boolean = false) {
     val db = dbHelper.writableDatabase
 
     val values = ContentValues().apply {
@@ -23,7 +23,14 @@ class CityStore(private val context: Context) {
       )
     }
 
-    val newRowId = db.insert(CityDbContract.CityEntry.TABLE_NAME, null, values)
+    val tbName = CityDbContract.CityEntry.TABLE_NAME
+    if (isEdit) db.update(
+      tbName,
+      values,
+      "${BaseColumns._ID} = ?",
+      arrayOf(city.id.toString())
+    )
+    else db.insert(tbName, null, values)
     db.close()
   }
 
@@ -52,7 +59,9 @@ class CityStore(private val context: Context) {
 
   fun closeDb() = dbHelper.close()
 
-  fun getCityById(cityId: Long): City {
+  fun getCityById(cityId: Long): City? {
+    if (cityId < 0) return null
+
     val db = dbHelper.readableDatabase
     val projection = arrayOf(
       BaseColumns._ID,
@@ -67,6 +76,10 @@ class CityStore(private val context: Context) {
 
     val cursor =
       db.query(CityDbContract.CityEntry.TABLE_NAME, projection, sel, selArg, null, null, null)
+
+    // Если не нашли подходящих зваписей
+    if (cursor.count == 0) return null
+
     cursor.moveToFirst()
 
     val city = City()

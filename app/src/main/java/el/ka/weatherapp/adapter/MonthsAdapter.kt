@@ -30,6 +30,14 @@ class MonthsAdapter(private val months: List<MonthTemperature>) :
   override fun getItemCount() = months.size
 
   fun getMonthsTemperature() = viewHolders.map { it.getTemperature() }
+
+  /*fun setTemperatures(temps: List<Double>) {
+    var i = 0
+    viewHolders.forEachIndexed { idx, viewHolder ->
+      if (temps.size < idx) viewHolder.setTemperature(temps[i])
+      i++
+    }
+  }*/
 }
 
 class MonthViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -42,4 +50,5 @@ class MonthViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
   }
 
   fun getTemperature(): Double = tempValue.text.toString().toDouble()
+  fun setTemperature(d: Double) { tempValue.setText(d.toString()) }
 }

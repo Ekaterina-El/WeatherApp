@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,18 +19,35 @@ import el.ka.weatherapp.data.model.YearSeasonType
 import el.ka.weatherapp.observer.Observed
 import el.ka.weatherapp.observer.ObservedValue
 import el.ka.weatherapp.observer.Observer
+import el.ka.weatherapp.ui.CityFragment.Companion.CITY_ID
+
+// TODO: Открытие на редактирование  города
+// TODO: Удаление города 
+// TODO: Решить проблему с возвратом на экран city (не загружаются данные)
+// TODO: Выводить средней температуры выбраного сезона в выбранном городе
+// TODO: Экспорт в Excel 
 
 class FirstFragment : Fragment(R.layout.first_fragment) {
   private val ctx by lazy { requireContext() as MainActivity }
   private val mView by lazy { requireView() }
   private val navController by lazy { findNavController() }
 
+  private val imageViewEditCity: ImageView by lazy { mView.findViewById(R.id.imageViewEditCity) }
+  private val editCityListener by lazy {
+    OnClickListener {
+      val city = currentCity.getValue() as? City
+      val cityId = city?.id.toString()
+      navigateToCityFragment(cityId)
+    }
+  }
+
   private val spinnerCity: Spinner by lazy { mView.findViewById(R.id.spinnerCity) }
   private val currentCity by lazy { ObservedValue() }
   private val spinnerCityListener by lazy {
     object : AdapterView.OnItemSelectedListener {
       override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-        val cityId = (parent!!.getItemAtPosition(pos) as SpinnerItem).programValue as Long  // Get city Id
+        val cityId =
+          (parent!!.getItemAtPosition(pos) as SpinnerItem).programValue as Long  // Get city Id
         loadCityDate(cityId)
       }
 
@@ -45,6 +63,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
       override fun notify(observed: Observed) {
         val a =
           ((observed as ObservedValue).getValue() as List<*>).mapNotNull { if (it is City) it else null }
+        imageViewEditCity.visibility = if (a.isEmpty())  View.GONE else View.VISIBLE
         updateCitySpinner()
         if (a.isNotEmpty()) spinnerCity.setSelection(0)
       }
@@ -52,7 +71,7 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   }
 
   private val buttonAdd by lazy { mView.findViewById<ConstraintLayout>(R.id.buttonAdd) }
-  private val buttonAddListener by lazy { OnClickListener { navigateTo(R.id.action_firstFragment_to_cityFragment) } }
+  private val buttonAddListener by lazy { OnClickListener { navigateToCityFragment() } }
 
   private val spinnerYearSeason: Spinner by lazy { mView.findViewById(R.id.spinnerYearSeason) }
   private val yearSeasonStore by lazy { ObservedValue() }
@@ -96,11 +115,12 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
   }
 
   private fun loadCityDate(cityId: Long) {
-    currentCity.updateValue(ctx.cityStore.getCityById(cityId))
+    val city = ctx.cityStore.getCityById(cityId) ?: return
+    currentCity.updateValue(city)
   }
 
   private val updatedCityDate by lazy {
-    object: Observer {
+    object : Observer {
       override fun notify(observed: Observed) {
         val city = currentCity.getValue() as? City
         val yearSeason = yearSeasonStore.getValue() as? YearSeasonType
@@ -115,8 +135,17 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     }
   }
 
-  private fun calculateAverageTemperature(temps: List<Double>?, yearSeason: YearSeasonType): String {
+  private fun calculateAverageTemperature(
+    temps: List<Double>?,
+    yearSeason: YearSeasonType
+  ): String {
     return "+34℃"
+  }
+
+  private fun navigateToCityFragment(cityId: String? = null) {
+    val bundle = Bundle()
+    bundle.putString(CITY_ID, cityId)
+    ctx.navigateTo(navController, R.id.action_firstFragment_to_cityFragment, bundle)
   }
 
   override fun onResume() {
@@ -125,6 +154,8 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     spinnerCity.onItemSelectedListener = spinnerCityListener
 
     buttonAdd.setOnClickListener(buttonAddListener)
+    imageViewEditCity.setOnClickListener(editCityListener)
+
     allCities.addListener(allCitiesObserver)
     currentCity.addListener(updatedCityDate)
     yearSeasonStore.addListener(updatedCityDate)
@@ -139,9 +170,6 @@ class FirstFragment : Fragment(R.layout.first_fragment) {
     yearSeasonStore.removeListener(updatedCityDate)
 
     buttonAdd.setOnClickListener(null)
-  }
-
-  private fun navigateTo(actionIdx: Int) {
-    navController.navigate(actionIdx)
+    imageViewEditCity.setOnClickListener(null)
   }
 }

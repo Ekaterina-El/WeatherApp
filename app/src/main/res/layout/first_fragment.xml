@@ -17,18 +17,18 @@
 
     <TextView
       style="@style/header2"
-      android:layout_marginEnd="10dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginEnd="10dp"
       android:text="@string/city" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/buttonAdd"
-      android:clickable="true"
-      android:focusable="true"
       android:layout_width="25dp"
       android:layout_height="25dp"
-      android:background="@drawable/button">
+      android:background="@drawable/button"
+      android:clickable="true"
+      android:focusable="true">
 
       <ImageView
         android:layout_width="20dp"
@@ -42,12 +42,30 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
   </LinearLayout>
 
-  <Spinner
-    android:id="@+id/spinnerCity"
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:spinnerMode="dropdown"
-    tools:listitem="@layout/spinner_item_with_icon" />
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <Spinner
+      android:id="@+id/spinnerCity"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="wrap_content"
+      android:spinnerMode="dropdown"
+      tools:listitem="@layout/spinner_item_with_icon" />
+
+    <ImageView
+      android:id="@+id/imageViewEditCity"
+      android:layout_width="22dp"
+      android:layout_height="22dp"
+      android:clickable="true"
+      android:focusable="true"
+      android:src="@drawable/ic_edit"
+      app:tint="@color/primary_color_dark" />
+  </LinearLayout>
+
 
   <TextView
     style="@style/header2"
