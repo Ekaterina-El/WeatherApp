@@ -1,6 +1,8 @@
 package el.ka.weatherapp.strategy
 
 import el.ka.weatherapp.data.model.TemperatureType
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 class Convertor {
   private val celsius by lazy { Celsius() }
@@ -13,7 +15,7 @@ class Convertor {
       TemperatureType.FAHRENHEIT -> fahrenheit
       TemperatureType.KELVIN -> kelvin
     }
-    return strategy.convertTo(num, to)
+    return strategy.convertTo(num, to).roundTo()
   }
 
   private fun TemperatureStrategy.convertTo(value: Double, to: TemperatureType): Double {
@@ -22,6 +24,12 @@ class Convertor {
       TemperatureType.FAHRENHEIT -> this.convertToFahrenheit(value)
       TemperatureType.KELVIN -> this.convertToKelvin(value)
     }
+  }
+
+
+  fun Double.roundTo(number: Int = 2): Double {
+    val a = 10.0.pow(number)
+    return (this * a).roundToInt() / a
   }
 
   fun getUnit(toTemperatureType: TemperatureType): String {
