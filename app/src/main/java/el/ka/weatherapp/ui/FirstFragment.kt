@@ -85,7 +85,10 @@ class FirstFragment : Fragment() {
   }
 
   private lateinit var buttonAdd: ConstraintLayout
-  private val buttonAddListener by lazy { OnClickListener { navigateToCityFragment() } }
+  private val buttonAddListener by lazy { OnClickListener {
+    ctx.excelGenerator.save()
+//    navigateToCityFragment()
+  } }
 
   private lateinit var spinnerTempType: Spinner
   private val toTemperatureType by lazy { ObservedValue() }

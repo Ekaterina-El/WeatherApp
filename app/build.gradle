@@ -1,3 +1,5 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -33,13 +35,22 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
+//    implementation files('src\\libs\\gcexcel-2.2.0.jar')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+
+//    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+//    implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
+//    implementation 'javax.xml.stream:stax-api:1.0'
+//    implementation 'com.fasterxml:aalto-xml:1.2.2'
+
+    implementation 'com.github.SUPERCILEX.poi-android:poi:3.17'
+    compileOnly 'org.apache.poi:poi-ooxml:3.17'
 }
